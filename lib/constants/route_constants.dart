@@ -11,4 +11,7 @@ class AppRoutes{
 
   //Login Router
   static const String login = '/login';
+
+  //CreateEventPage Route
+  static const String createEventPage = '/createEvent';
 }

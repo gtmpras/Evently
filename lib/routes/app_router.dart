@@ -1,6 +1,7 @@
+import 'package:evently/pages/create_events_page.dart';
 import 'package:evently/screens/login_screen.dart';
 import 'package:go_router/go_router.dart';
-import 'package:evently/screens/home_page.dart';
+import 'package:evently/screens/home_screen.dart';
 import 'package:evently/screens/splash_screen.dart';
 import 'package:evently/constants/route_constants.dart';
 
@@ -14,7 +15,7 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.home,
         name: AppRoutes.home,
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) => const HomeScreen(),
       ),
 
       // Splash Screen
@@ -24,11 +25,18 @@ class AppRouter {
         builder: (context, state) => const SplashScreen(),
       ),
 
-       // Splash Screen
+       // Login Screen
       GoRoute(
         path: AppRoutes.login,
         name: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
+      ),
+       
+       //CreateEvent Page
+      GoRoute(
+        path: AppRoutes.createEventPage,
+        name: AppRoutes.createEventPage,
+        builder: (context, state) => const CreateEventPage(),
       ),
 
     ],

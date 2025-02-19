@@ -1,17 +1,19 @@
 import 'package:evently/constants/font_constants.dart';
+import 'package:evently/constants/route_constants.dart';
 import 'package:evently/helper/gap.dart';
 import 'package:evently/widgets/button_widget.dart';
 import 'package:evently/widgets/card_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +62,9 @@ class _HomePageState extends State<HomePage> {
           ),
           HorizontalGap.xs,
           customElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              context.push(AppRoutes.createEventPage);
+            },
             child: Text(
               "Create Events",
               style: AppFonts.buttonText.copyWith(color: Colors.black),
