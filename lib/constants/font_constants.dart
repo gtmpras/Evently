@@ -27,9 +27,15 @@ class AppFonts {
   );
 
   static TextStyle subheading = GoogleFonts.poppins(
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: FontWeight.bold,
     color: Colors.grey,
+  );
+
+  static TextStyle bodyheading = GoogleFonts.poppins(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: Colors.black87,
   );
 
   static TextStyle bodyText = GoogleFonts.poppins(
