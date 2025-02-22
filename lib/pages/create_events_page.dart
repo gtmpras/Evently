@@ -16,12 +16,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
   final TextEditingController eventNameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController targetAudienceController = TextEditingController();
-  final TextEditingController numberOfAudience = TextEditingController();
-  final TextEditingController sponsorName = TextEditingController();
-  final TextEditingController sponsorUrl = TextEditingController();
-  final TextEditingController hostName = TextEditingController();
-  final TextEditingController eventDate = TextEditingController();
-  final TextEditingController eventLocation = TextEditingController();
+  final TextEditingController numberOfAudienceController = TextEditingController();
+  final TextEditingController hostNameController = TextEditingController();
+  final TextEditingController eventDateController = TextEditingController();
+  final TextEditingController eventLocationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +86,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
               customTextFormField(targetAudienceController, TextInputType.text),
 
               _buildSectionTitle("Expected Number of Audience"),
-              customTextFormField(numberOfAudience, TextInputType.number),
+              customTextFormField(numberOfAudienceController, TextInputType.number),
 
               Divider(height: 50),
               _buildSectionTitle("Event Contact"),
@@ -98,13 +96,13 @@ class _CreateEventPageState extends State<CreateEventPage> {
               ),
 
               _buildSectionTitle("Host Name"),
-              customTextFormField(hostName, TextInputType.text),
+              customTextFormField(hostNameController, TextInputType.text),
 
               _buildSectionTitle("Event Date"),
-              customTextFormField(eventDate, TextInputType.datetime),
+              customTextFormField(eventDateController, TextInputType.datetime),
 
               _buildSectionTitle("Event Location"),
-              customTextFormField(eventLocation, TextInputType.text),
+              customTextFormField(eventLocationController, TextInputType.text),
 
               Divider(),
               Center(
