@@ -14,4 +14,7 @@ class AppRoutes{
 
   //CreateEventPage Route
   static const String createEventPage = '/createEvent';
+
+  //Authcheck route
+ static const String authCheck = '/authCheck';
 }
