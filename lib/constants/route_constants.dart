@@ -4,13 +4,13 @@ class AppRoutes{
   AppRoutes._();
   
   //Home Route
-  static const String home = '/';
+  static const String home = '/home';
 
   //Splash Screen
   static const String splash = '/splash';
 
   //Login Router
-  static const String login = '/login';
+  static const String login = '/';
 
   //CreateEventPage Route
   static const String createEventPage = '/createEvent';

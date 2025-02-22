@@ -1,7 +1,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evently/constants/route_constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService{
@@ -66,5 +68,11 @@ Future <void> _saveUserData(User user) async {
 Future<void> signOut(BuildContext context) async{
   await FirebaseAuth.instance.signOut();
   await GoogleSignIn().signOut();
+
+  //After successful sign-out, navigate to the login screen
+  context.go(AppRoutes.login);
+  print("Signed out successfully");
+  
+
 }
 }

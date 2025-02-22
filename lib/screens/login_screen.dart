@@ -1,7 +1,7 @@
+
 import 'package:evently/constants/font_constants.dart';
 import 'package:evently/constants/route_constants.dart';
 import 'package:evently/helper/gap.dart';
-import 'package:evently/screens/home_screen.dart';
 import 'package:evently/services/auth_services.dart';
 import 'package:evently/widgets/button_widget.dart';
 import 'package:evently/widgets/card_widget.dart';
@@ -19,7 +19,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -53,15 +52,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: customCardWidget(
                   child: Column(
                     children: [
-                      Text('Login Using', style: AppFonts.heading.copyWith(color: Colors.black)),
+                      Text(
+                        'Login Using',
+                        style: AppFonts.heading.copyWith(color: Colors.black),
+                      ),
                       VerticalGap.xl,
 
                       // Google Login Button
                       customElevatedButton(
                         onPressed: () {
-                          // Google Login logic
                           _handleGoogleBtnClick();
-                       
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white, // Button color
@@ -74,7 +74,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             Image.asset('images/google.png', height: 30),
                             HorizontalGap.xl,
-                            Text("Google", style: AppFonts.subheading.copyWith(color: Colors.red)),
+                            Text(
+                              "Google",
+                              style: AppFonts.subheading.copyWith(
+                                color: Colors.red,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -90,13 +95,24 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  _handleGoogleBtnClick()async{
+  // handling Google SignIn function
+  _handleGoogleBtnClick() async {
     bool isSignedIn = await AuthService().signInWithGoogle();
-    if(isSignedIn){
+    if (isSignedIn) {
       context.pushReplacement(AppRoutes.home);
-    }else{
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Signed-in-failed. Please try again"))
+        SnackBar(
+          content: Text("Signing Into Evently", style: AppFonts.bodyText),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Signed-in-failed. Please try again",
+            style: AppFonts.bodyText,
+          ),
+        ),
       );
     }
   }

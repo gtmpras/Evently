@@ -8,7 +8,7 @@ import 'package:evently/constants/route_constants.dart';
 //AppRouter
 class AppRouter {
   final GoRouter _router = GoRouter(
-    initialLocation: AppRoutes.login,
+    initialLocation: '/',
     routes: [
 
       //Home Screen

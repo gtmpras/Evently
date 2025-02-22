@@ -1,6 +1,7 @@
 import 'package:evently/constants/font_constants.dart';
 import 'package:evently/constants/route_constants.dart';
 import 'package:evently/helper/gap.dart';
+import 'package:evently/services/auth_services.dart';
 import 'package:evently/widgets/button_widget.dart';
 import 'package:evently/widgets/card_widget.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           HorizontalGap.xs,
           customElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              _handleSignOut(context);
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
               elevation: 5,
@@ -150,4 +153,15 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+_handleSignOut(dynamic context) async {
+ try{
+   await AuthService().signOut(context); 
+  print("Signed out successfully");
+  context.go(AppRoutes.login);
+ }
+ catch(e){
+  print("Error while sign-out $e");
+ }
 }
