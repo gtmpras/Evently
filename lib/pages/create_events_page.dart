@@ -1,10 +1,12 @@
 import 'dart:io';
-
 import 'package:evently/constants/font_constants.dart';
 import 'package:evently/helper/gap.dart';
+import 'package:evently/models/evently_model.dart';
+import 'package:evently/services/auth_services.dart';
 import 'package:evently/widgets/button_widget.dart';
 import 'package:evently/widgets/card_widget.dart';
 import 'package:evently/widgets/textformfield_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -24,25 +26,37 @@ class _CreateEventPageState extends State<CreateEventPage> {
   final TextEditingController eventDateController = TextEditingController();
   final TextEditingController eventLocationController = TextEditingController();
 
+  @override
+  void dispose() {
+    eventNameController.dispose();
+    descriptionController.dispose();
+    targetAudienceController.dispose();
+    numberOfAudienceController.dispose();
+    hostNameController.dispose();
+    eventDateController.dispose();
+    eventLocationController.dispose();
+    super.dispose();
+  }
 
-  File? _image;
+  File? bannerPhoto;
   final picker = ImagePicker();
-  
-  Future getImage()async{
-    final pickedImage = await picker.pickImage(
-      source: ImageSource.gallery);
 
-      setState(() {
-        if(pickedImage != null){
-          _image = File(pickedImage.path);
-        }else{
-          print("No image is picked");
-        }
-      });
+  Future getImage() async {
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedImage != null) {
+        bannerPhoto = File(pickedImage.path);
+      } else {
+        print("No image is picked");
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final String userUid = FirebaseAuth.instance.currentUser!.uid;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -71,28 +85,36 @@ class _CreateEventPageState extends State<CreateEventPage> {
               SizedBox(
                 width: double.infinity,
                 child: customCardWidget(
-                  child: _image == null ? Column(
-                    children: [
-                      Image.asset(
-                        "images/image.png",
-                        height: 50,
-                        color: Colors.grey,
-                      ),
-                      VerticalGap.s,
-                      Text("Banner of Event:", style: AppFonts.bodyheading),
-                      VerticalGap.s,
-                      customElevatedButton(
-                        onPressed: () {
-                          getImage();
-                          // Pick file from gallery
-                        },
-                        child: Text(
-                          "Choose File",
-                          style: AppFonts.buttonText.copyWith(color: Colors.black),
-                        ),
-                      ),
-                    ],
-                  ):Image.file(_image!,fit: BoxFit.fill,),
+                  child:
+                      bannerPhoto == null
+                          ? Column(
+                            children: [
+                              Image.asset(
+                                "images/image.png",
+                                height: 50,
+                                color: Colors.grey,
+                              ),
+                              VerticalGap.s,
+                              Text(
+                                "Banner of Event:",
+                                style: AppFonts.bodyheading,
+                              ),
+                              VerticalGap.s,
+                              customElevatedButton(
+                                onPressed: () {
+                                  getImage();
+                                  // Pick file from gallery
+                                },
+                                child: Text(
+                                  "Choose File",
+                                  style: AppFonts.buttonText.copyWith(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                          : Image.file(bannerPhoto!, fit: BoxFit.fill),
                 ),
               ),
 
@@ -107,7 +129,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
               customTextFormField(targetAudienceController, TextInputType.text),
 
               _buildSectionTitle("Expected Number of Audience"),
-              customTextFormField(numberOfAudienceController, TextInputType.number),
+              customTextFormField(
+                numberOfAudienceController,
+                TextInputType.number,
+              ),
 
               Divider(height: 50),
               _buildSectionTitle("Event Contact"),
@@ -120,7 +145,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
               customTextFormField(hostNameController, TextInputType.text),
 
               _buildSectionTitle("Event Date"),
-              customTextFormField(eventDateController, TextInputType.datetime),
+              customDatePicker(eventDateController, context),
 
               _buildSectionTitle("Event Location"),
               customTextFormField(eventLocationController, TextInputType.text),
@@ -128,8 +153,33 @@ class _CreateEventPageState extends State<CreateEventPage> {
               Divider(),
               Center(
                 child: customElevatedButton(
-                  onPressed: () {
-                    // Save event logic here
+                  onPressed: () async {
+                    DateTime eventDate = DateTime.parse(
+                      eventDateController.text,
+                    );
+                    ActiveEvent event = ActiveEvent(
+                      docId: userUid,
+                      eventName: eventNameController.text,
+                      eventDesc: descriptionController.text,
+                      location: eventLocationController.text,
+                      bannerPhoto:
+                          "bannerPhoto", // You will replace this with actual image upload later
+                      hostName: hostNameController.text,
+                      eventDate: eventDate,
+                    );
+
+                    // Save event to Firestore
+                    try {
+                      await AuthService().addActiveEvent(event);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Event Created Successfully")),
+                      );
+                    } catch (e) {
+                      // Handle any errors that occur when adding event
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Error creating event")),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
@@ -148,10 +198,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
   Widget _buildSectionTitle(String title) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: AppFonts.bodyheading),
-        VerticalGap.m,
-      ],
+      children: [Text(title, style: AppFonts.bodyheading), VerticalGap.m],
     );
   }
 }

@@ -96,7 +96,7 @@ Future<void> addActiveEvent(ActiveEvent event)async{
       'location':event.location,
       'bannerPhoto': event.bannerPhoto,
       'hostName': event.hostName,
-      'eventDate': event..eventDate
+      'eventDate': event.eventDate
     });
   }catch(e){
     throw Exception("Error adding event: $e");
