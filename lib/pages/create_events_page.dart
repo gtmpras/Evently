@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:evently/constants/font_constants.dart';
 import 'package:evently/helper/gap.dart';
 import 'package:evently/widgets/button_widget.dart';
 import 'package:evently/widgets/card_widget.dart';
 import 'package:evently/widgets/textformfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateEventPage extends StatefulWidget {
   const CreateEventPage({super.key});
@@ -20,6 +23,23 @@ class _CreateEventPageState extends State<CreateEventPage> {
   final TextEditingController hostNameController = TextEditingController();
   final TextEditingController eventDateController = TextEditingController();
   final TextEditingController eventLocationController = TextEditingController();
+
+
+  File? _image;
+  final picker = ImagePicker();
+  
+  Future getImage()async{
+    final pickedImage = await picker.pickImage(
+      source: ImageSource.gallery);
+
+      setState(() {
+        if(pickedImage != null){
+          _image = File(pickedImage.path);
+        }else{
+          print("No image is picked");
+        }
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +71,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
               SizedBox(
                 width: double.infinity,
                 child: customCardWidget(
-                  child: Column(
+                  child: _image == null ? Column(
                     children: [
                       Image.asset(
                         "images/image.png",
@@ -63,6 +83,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       VerticalGap.s,
                       customElevatedButton(
                         onPressed: () {
+                          getImage();
                           // Pick file from gallery
                         },
                         child: Text(
@@ -71,7 +92,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         ),
                       ),
                     ],
-                  ),
+                  ):Image.file(_image!,fit: BoxFit.fill,),
                 ),
               ),
 
