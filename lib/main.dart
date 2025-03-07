@@ -1,5 +1,5 @@
 import 'package:evently/firebase_options.dart';
-import 'package:evently/routes/app_router.dart';
+import 'package:evently/src/partners/routes/app_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

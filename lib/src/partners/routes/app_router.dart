@@ -1,10 +1,10 @@
-import 'package:evently/pages/create_events_page.dart';
-import 'package:evently/screens/login_screen.dart';
-import 'package:evently/services/auth_check.dart';
+import 'package:evently/src/pages/create_events_page.dart';
+import 'package:evently/src/screens/login_screen.dart';
+import 'package:evently/src/partners/services/auth_check.dart';
 import 'package:go_router/go_router.dart';
-import 'package:evently/screens/home_screen.dart';
-import 'package:evently/screens/splash_screen.dart';
-import 'package:evently/constants/route_constants.dart';
+import 'package:evently/src/screens/home_screen.dart';
+import 'package:evently/src/screens/splash_screen.dart';
+import 'package:evently/core/constants/route_constants.dart';
 
 //AppRouter
 class AppRouter {

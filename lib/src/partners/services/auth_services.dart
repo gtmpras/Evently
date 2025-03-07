@@ -1,7 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evently/constants/route_constants.dart';
-import 'package:evently/models/evently_model.dart';
+import 'package:evently/core/constants/route_constants.dart';
+import 'package:evently/src/partners/models/evently_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

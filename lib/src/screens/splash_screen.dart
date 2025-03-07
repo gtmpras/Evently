@@ -1,5 +1,5 @@
 
-import 'package:evently/constants/route_constants.dart';
+import 'package:evently/core/constants/route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

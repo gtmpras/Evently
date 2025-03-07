@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evently/screens/home_screen.dart';
-import 'package:evently/screens/login_screen.dart';
+import 'package:evently/src/screens/home_screen.dart';
+import 'package:evently/src/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
