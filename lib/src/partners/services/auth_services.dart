@@ -67,11 +67,11 @@ Future <void> _saveUserData(User user) async {
 }
 
 //Fetch all the active events from FireStore
-Future<List<ActiveEvent>> fetchActiveEvents()async{
+Future<List<ActiveEvents>> fetchActiveEvents()async{
   try{
     var snapshot = await firestore.collection('ActiveEvents').get();
     return snapshot.docs.map((doc){
-    return ActiveEvent(
+    return ActiveEvents(
       docId: doc.id,
       eventName: doc['eventName'],
       eventDesc: doc['eventDesc'], 

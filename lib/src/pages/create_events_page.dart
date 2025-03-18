@@ -20,8 +20,8 @@ class CreateEventPage extends StatefulWidget {
 class _CreateEventPageState extends State<CreateEventPage> {
   final TextEditingController eventNameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController targetAudienceController = TextEditingController();
-  final TextEditingController numberOfAudienceController = TextEditingController();
+  final TextEditingController targetAudienceController =TextEditingController();
+  final TextEditingController numberOfAudienceController =TextEditingController();
   final TextEditingController hostNameController = TextEditingController();
   final TextEditingController eventDateController = TextEditingController();
   final TextEditingController eventLocationController = TextEditingController();
@@ -157,7 +157,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                     DateTime eventDate = DateTime.parse(
                       eventDateController.text,
                     );
-                    ActiveEvent event = ActiveEvent(
+                    ActiveEvents event = ActiveEvents(
                       docId: userUid,
                       eventName: eventNameController.text,
                       eventDesc: descriptionController.text,
