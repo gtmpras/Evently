@@ -19,6 +19,23 @@ class EventModel {
     }
   }
 
+  //from Map
+  EventModel.fromMap(Map<String, dynamic>map){
+    if (map['activeEvents']!= null){
+      activeEvents = <ActiveEvents>[];
+      map['activeEvents'].forEach((v){
+        activeEvents!.add(ActiveEvents.fromJson(v));
+      });
+    }
+
+    if(map['registration']!= null){
+      registration = <Registration>[];
+      map['registration'].forEach((v){
+        registration!.add(Registration.fromJson(v));
+      });
+    }
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.activeEvents != null) {
