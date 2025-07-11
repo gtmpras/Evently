@@ -78,7 +78,7 @@ Future<List<ActiveEvents>> fetchActiveEvents()async{
       location: doc['location'],
       bannerPhoto: doc['bannerPhoto'], 
       hostName: doc['hostName'],
-      eventDate: (doc['eventDate']as Timestamp).toDate(),
+      eventDate: (doc['eventDate'] as Timestamp).toDate().toIso8601String(), //converting eventDate to string format
     );
   }).toList();
   }catch (e){
@@ -88,7 +88,7 @@ Future<List<ActiveEvents>> fetchActiveEvents()async{
 
 
 //Add a new active event
-Future<void> addActiveEvent(ActiveEvent event)async{
+Future<void> addActiveEvent(ActiveEvents event)async{
   try{
     await firestore.collection('ActiveEvents').add({
       'eventName': event.eventName,

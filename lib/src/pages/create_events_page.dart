@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:evently/core/constants/font_constants.dart';
 import 'package:evently/core/helper/gap.dart';
+import 'package:evently/src/partners/databases/dbHelper.dart';
 import 'package:evently/src/partners/models/evently_model.dart';
-import 'package:evently/src/partners/services/auth_services.dart';
 import 'package:evently/core/widgets/button_widget.dart';
 import 'package:evently/core/widgets/card_widget.dart';
 import 'package:evently/core/widgets/textformfield_widget.dart';
@@ -20,8 +20,10 @@ class CreateEventPage extends StatefulWidget {
 class _CreateEventPageState extends State<CreateEventPage> {
   final TextEditingController eventNameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController targetAudienceController =TextEditingController();
-  final TextEditingController numberOfAudienceController =TextEditingController();
+  final TextEditingController targetAudienceController =
+      TextEditingController();
+  final TextEditingController numberOfAudienceController =
+      TextEditingController();
   final TextEditingController hostNameController = TextEditingController();
   final TextEditingController eventDateController = TextEditingController();
   final TextEditingController eventLocationController = TextEditingController();
@@ -153,34 +155,78 @@ class _CreateEventPageState extends State<CreateEventPage> {
               Divider(),
               Center(
                 child: customElevatedButton(
-                  onPressed: () async {
-                    DateTime eventDate = DateTime.parse(
-                      eventDateController.text,
-                    );
-                    ActiveEvents event = ActiveEvents(
-                      docId: userUid,
-                      eventName: eventNameController.text,
-                      eventDesc: descriptionController.text,
-                      location: eventLocationController.text,
-                      bannerPhoto:
-                          "bannerPhoto", // You will replace this with actual image upload later
-                      hostName: hostNameController.text,
-                      eventDate: eventDate,
-                    );
+                  // onPressed: () async {
+                  //   DateTime eventDate = DateTime.parse(
+                  //     eventDateController.text,
+                  //   );
+                  //   ActiveEvents event = ActiveEvents(
+                  //     docId: userUid,
+                  //     eventName: eventNameController.text,
+                  //     eventDesc: descriptionController.text,
+                  //     location: eventLocationController.text,
+                  //     bannerPhoto:
+                  //         "bannerPhoto", // You will replace this with actual image upload later
+                  //     hostName: hostNameController.text,
+                  //     eventDate: eventDate.toIso8601String(),//converting event date to string format
+                  //   );
 
-                    // Save event to Firestore
-                    try {
-                      await AuthService().addActiveEvent(event);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Event Created Successfully")),
-                      );
-                    } catch (e) {
-                      // Handle any errors that occur when adding event
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Error creating event")),
-                      );
-                    }
-                  },
+                  //   // Save event to Firestore
+                  //   try {
+                  //     await AuthService().addActiveEvent(event);
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       SnackBar(content: Text("Event Created Successfully")),
+                  //     );
+                  //   } catch (e) {
+                  //     // Handle any errors that occur when adding event
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       SnackBar(content: Text("Error creating event")),
+                  //     );
+                  //   }
+                  // },
+
+                  // Modify your onPressed method inside CreateEventPage widget
+                  onPressed: () {},
+
+                  //  () async {
+                  //   // Get user UID
+                  //   final String userUid = FirebaseAuth.instance.currentUser!.uid;
+
+                  //   // Parse the event date
+                  //   DateTime eventDate = DateTime.parse(eventDateController.text);
+
+                  //   // Create the event object using the form data
+                  //   EventModel event = EventModel(
+                  //     docId: userUid,  // User's UID
+                  //     eventName: eventNameController.text,
+                  //     eventDesc: descriptionController.text,
+                  //     location: eventLocationController.text,
+                  //     bannerPhoto: bannerPhoto?.path ?? "",  // You may need to handle actual image upload separately later
+                  //     hostName: hostNameController.text,
+                  //     eventDate: eventDate.toIso8601String(),  // Convert DateTime to String
+                  //     activeEvents: [
+                  //       ActiveEvents(docId: userUid, eventId: userUid),
+                  //     ],  // Add ActiveEvents if needed
+                  //     registration: [],  // If you have registration details to store, populate them here
+                  //   );
+
+                  //   try {
+                  //     // Save event to the database using DbHelper
+                  //     await DbHelper.dbHelper.insertEventModel(event);
+
+                  //     // Show success message
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       SnackBar(content: Text("Event Created Successfully")),
+                  //     );
+
+                  //     // Optionally navigate back or clear the form
+                  //     Navigator.pop(context);
+                  //   } catch (e) {
+                  //     // Handle errors
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       SnackBar(content: Text("Error creating event: $e")),
+                  //     );
+                  //   }
+                  // },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     elevation: 5,
