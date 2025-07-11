@@ -15,7 +15,7 @@ class AppFonts {
   );
 
   static TextStyle headingL = GoogleFonts.poppins(
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: FontWeight.bold,
     color: Colors.black,
   );

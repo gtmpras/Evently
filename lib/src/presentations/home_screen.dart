@@ -36,11 +36,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 _buildWelcomeBanner(),
                 VerticalGap.l,
                 _buildButtonRow(),
-                VerticalGap.xl,
+                VerticalGap.xs,
                 _buildDescriptionSection(),
-                VerticalGap.xxl,
-                Text("Platform Stats", style: AppFonts.headingL),
-                VerticalGap.m,
+                VerticalGap.xs,
+                Text("Platform Stats", style: AppFonts.heading),
+                VerticalGap.xxs,
                 _buildGridView(),
               ],
             ),
@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildWelcomeBanner() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [Colors.deepPurple, Colors.purpleAccent],
@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Text(
             "Welcome to Evently 👋",
-            style: AppFonts.headingL.copyWith(color: Colors.white),
+            style: AppFonts.heading.copyWith(color: Colors.white),
           ),
           VerticalGap.xl,
           Text(
@@ -88,9 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildStyledButton("Find Events", onPressed: () {}),
           _buildStyledButton(
             "Create Events",
-            onPressed: () {
-              context.push(AppRoutes.createEventPage);
-            },
+            onPressed: () => _buildCreateEvents(),
+            // () {
+            //   context.push(AppRoutes.createEventPage);
+            // },
           ),
           _buildStyledButton(
             "Sign Out",
@@ -99,6 +100,37 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  _buildCreateEvents() {
+    return showModalBottomSheet(
+      context: context,
+      builder:
+          (_) => Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Create New Event", style: AppFonts.heading),
+                VerticalGap.xs,
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: "Event Name",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                VerticalGap.s,
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle event creation logic
+                    Navigator.pop(context);
+                  },
+                  child: Text("Create Event"),
+                ),
+              ],
+            ),
+          ),
     );
   }
 
@@ -114,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
         style: ElevatedButton.styleFrom(
           backgroundColor: isDanger ? Colors.red : Colors.blue,
           foregroundColor: isDanger ? Colors.blue : Colors.black,
-          elevation: 4,
+          elevation: 1,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
             side: BorderSide(color: Colors.grey.shade300),
@@ -135,12 +167,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: Column(
         children: [
-          Text("Experience hassle-free Events", style: AppFonts.headingL),
-          VerticalGap.l,
+          Text("Experience hassle-free Events", style: AppFonts.heading),
+          VerticalGap.xs,
           Text(
             "Welcome to Evently, your all-in-one event management solution designed to simplify planning and execution. Whether it's a corporate event, wedding, or social gathering, our intuitive platform helps you manage schedules, send invitations, track RSVPs, and coordinate vendors effortlessly.",
             style: AppFonts.bodyText,
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.justify,
           ),
         ],
       ),
@@ -169,8 +201,8 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: 4,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
         childAspectRatio: 1,
       ),
       itemBuilder: (context, index) {
@@ -192,11 +224,11 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Image.asset(
                 imagePaths[index],
-                height: 40,
+                height: 35,
                 color: Colors.deepPurple,
               ),
               VerticalGap.xs,
-              Text(downloadCounts[index], style: AppFonts.headingL),
+              Text(downloadCounts[index], style: AppFonts.heading),
               Text(downloadLabels[index], style: AppFonts.subheading),
             ],
           ),
