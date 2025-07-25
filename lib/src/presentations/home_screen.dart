@@ -1,8 +1,6 @@
 import 'package:evently/core/constants/font_constants.dart';
 import 'package:evently/core/helper/gap.dart';
 import 'package:evently/core/routing/route_constants.dart';
-import 'package:evently/shared/widgets/decoration/text_field_decoration.dart';
-import 'package:evently/shared/widgets/form_field_title.dart';
 import 'package:evently/src/partners/services/auth_services.dart';
 import 'package:evently/src/presentations/widgets/create_event_form.dart';
 import 'package:flutter/material.dart';
@@ -29,24 +27,37 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildWelcomeBanner(),
-                VerticalGap.l,
-                _buildButtonRow(),
-                VerticalGap.xs,
-                _buildDescriptionSection(),
-                VerticalGap.xs,
-                Text("Platform Stats", style: AppFonts.heading),
-                VerticalGap.xxs,
-                _buildGridView(),
-              ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 16,
+              ),
+              child: _buildWelcomeBanner(),
             ),
-          ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: _buildButtonRow(),
+            ),
+            VerticalGap.xxs,
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
+                child: Column(
+                  children: [
+                    _buildDescriptionSection(),
+                    VerticalGap.xxs,
+                    Text("Platform Stats", style: AppFonts.heading),
+                    VerticalGap.xxs,
+                    _buildGridView(),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

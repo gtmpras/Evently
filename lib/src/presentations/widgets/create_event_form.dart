@@ -1,3 +1,4 @@
+import 'package:evently/core/constants/font_constants.dart';
 import 'package:evently/core/helper/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:evently/shared/widgets/decoration/text_field_decoration.dart';
@@ -34,7 +35,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
+              HorizontalGap.xl,
               Expanded(
                 child: TextFieldFormat(
                   textFieldName: "Target Audience",
@@ -49,7 +50,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          VerticalGap.xs,
 
           // Description field
           TextFieldFormat(
@@ -63,7 +64,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          VerticalGap.xs,
 
           Divider(),
 
@@ -82,7 +83,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
+              HorizontalGap.xl,
               Expanded(
                 child: TextFieldFormat(
                   textFieldName: "Event Date",
@@ -97,8 +98,9 @@ class _CreateEventFormState extends State<CreateEventForm> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          VerticalGap.xs,
 
+          //Time and Location
           Row(
             children: [
               Expanded(
@@ -113,7 +115,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
+              HorizontalGap.xl,
               Expanded(
                 child: TextFieldFormat(
                   textFieldName: "Location",
@@ -137,7 +139,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                   "Pick Banner Image",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 6),
+                VerticalGap.xs,
                 Container(
                   height: height * 0.2,
                   width: double.infinity,
@@ -152,15 +154,30 @@ class _CreateEventFormState extends State<CreateEventForm> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Icon(Icons.camera_alt, size: 40, color: Colors.grey),
-                      SizedBox(height: 6),
+                      VerticalGap.xs,
                       Text("Upload Image"),
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                VerticalGap.xs,
               ],
             ),
           ),
+
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10.0,
+              vertical: 12.0,
+            ),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: Colors.purpleAccent.shade100,
+            ),
+            child: Text("Confirm", style: AppFonts.buttonText),
+          ),
+          VerticalGap.xs,
         ],
       ),
     );
