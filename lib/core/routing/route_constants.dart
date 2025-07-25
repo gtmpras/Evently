@@ -1,8 +1,7 @@
-
 // App Routes
-class AppRoutes{
+class AppRoutes {
   AppRoutes._();
-  
+
   //Home Route
   static const String home = '/home';
 
@@ -16,5 +15,5 @@ class AppRoutes{
   static const String createEventPage = '/createEvent';
 
   //Authcheck route
- static const String authCheck = '/authCheck';
+  static const String authCheck = '/authCheck';
 }

@@ -1,9 +1,10 @@
 import 'package:evently/core/constants/font_constants.dart';
-import 'package:evently/core/constants/route_constants.dart';
 import 'package:evently/core/helper/gap.dart';
+import 'package:evently/core/routing/route_constants.dart';
+import 'package:evently/shared/widgets/decoration/text_field_decoration.dart';
+import 'package:evently/shared/widgets/form_field_title.dart';
 import 'package:evently/src/partners/services/auth_services.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -108,27 +109,26 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder:
           (_) => Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text("Create New Event", style: AppFonts.heading),
-                VerticalGap.xs,
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: "Event Name",
-                    border: OutlineInputBorder(),
+            padding: EdgeInsets.all(16),
+            child: Form(
+              onChanged: () {},
+              child: Column(
+                children: [
+                  Expanded(
+                    child: TextFieldFormat(
+                      textFieldName: "Event Name",
+                      textFormField: TextFormField(
+                        // controller: eventNameController
+                        style: Theme.of(context).textTheme.displaySmall,
+                        decoration: TextFormDecoration(context).decoration(
+                          hintText: "Enter Event Name",
+                          errorText: null,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                VerticalGap.s,
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle event creation logic
-                    Navigator.pop(context);
-                  },
-                  child: Text("Create Event"),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
     );

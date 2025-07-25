@@ -1,11 +1,12 @@
 import 'dart:io';
 import 'package:evently/core/constants/font_constants.dart';
 import 'package:evently/core/helper/gap.dart';
-import 'package:evently/src/partners/databases/dbHelper.dart';
-import 'package:evently/src/partners/models/evently_model.dart';
-import 'package:evently/core/widgets/button_widget.dart';
-import 'package:evently/core/widgets/card_widget.dart';
-import 'package:evently/core/widgets/textformfield_widget.dart';
+import 'package:evently/shared/widgets/button_widget.dart';
+import 'package:evently/shared/widgets/card_widget.dart';
+import 'package:evently/shared/widgets/textformfield_widget.dart';
+// import 'package:evently/shared/widgets/button_widget.dart';
+// import 'package:evently/shared/widgets/card_widget.dart';
+// import 'package:evently/shared/widgets/textformfield_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

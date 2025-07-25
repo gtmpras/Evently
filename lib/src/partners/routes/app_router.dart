@@ -1,9 +1,10 @@
 import 'package:evently/src/pages/create_events_page.dart';
-import 'package:evently/src/presentations/login_screen.dart';
 import 'package:evently/src/partners/services/auth_check.dart';
-import 'package:go_router/go_router.dart';
 import 'package:evently/src/presentations/home_screen.dart';
+import 'package:evently/src/presentations/login_screen.dart';
 import 'package:evently/src/presentations/splash_screen.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:evently/core/routing/route_constants.dart';
 
 //AppRouter

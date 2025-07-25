@@ -1,5 +1,4 @@
-
-import 'package:evently/core/constants/route_constants.dart';
+import 'package:evently/core/routing/route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,16 +13,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(
-      seconds: 5, milliseconds: 500
-    ),
-    ()=> context.go(AppRoutes.home));
+    Future.delayed(
+      const Duration(seconds: 5, milliseconds: 500),
+      () => context.go(AppRoutes.home),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-
-    );
+    return const Scaffold();
   }
 }

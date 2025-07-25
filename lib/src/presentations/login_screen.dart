@@ -1,10 +1,9 @@
-
 import 'package:evently/core/constants/font_constants.dart';
-import 'package:evently/core/constants/route_constants.dart';
 import 'package:evently/core/helper/gap.dart';
+import 'package:evently/core/routing/route_constants.dart';
+import 'package:evently/shared/widgets/button_widget.dart';
+import 'package:evently/shared/widgets/card_widget.dart';
 import 'package:evently/src/partners/services/auth_services.dart';
-import 'package:evently/core/widgets/button_widget.dart';
-import 'package:evently/core/widgets/card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
