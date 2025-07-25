@@ -5,12 +5,12 @@ Widget customTextFormField(
   TextInputType inputType,
 ) {
   return TextFormField(
+    cursorHeight: 0.5,
     controller: controller,
     keyboardType: inputType,
     decoration: InputDecoration(border: OutlineInputBorder()),
   );
 }
-
 
 Widget customDatePicker(
   TextEditingController controller,
@@ -23,23 +23,25 @@ Widget customDatePicker(
       border: OutlineInputBorder(),
       hintText: 'Select Date', // Optional hint text
     ),
-    onTap: () => _selectDate(context,controller),
+    onTap: () => _selectDate(context, controller),
   );
-
-  
 }
 
- Future<void> _selectDate(BuildContext context, TextEditingController controller)async {
-      // Open the date picker and await the selected date
-      DateTime? datePicked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2024),
-        lastDate: DateTime(2026),
-      );
+Future<void> _selectDate(
+  BuildContext context,
+  TextEditingController controller,
+) async {
+  // Open the date picker and await the selected date
+  DateTime? datePicked = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2024),
+    lastDate: DateTime(2026),
+  );
 
-      if (datePicked != null) {
-        // Format the selected date as yyyy-MM-dd
-        controller.text = '${datePicked.year}-${datePicked.month.toString().padLeft(2, '0')}-${datePicked.day.toString().padLeft(2, '0')}';
-      }
-    }
+  if (datePicked != null) {
+    // Format the selected date as yyyy-MM-dd
+    controller.text =
+        '${datePicked.year}-${datePicked.month.toString().padLeft(2, '0')}-${datePicked.day.toString().padLeft(2, '0')}';
+  }
+}

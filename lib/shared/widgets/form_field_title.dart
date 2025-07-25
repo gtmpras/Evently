@@ -35,7 +35,7 @@ class TextFieldFormat extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 2),
         textFormField,
       ],
     );

@@ -4,6 +4,7 @@ import 'package:evently/core/routing/route_constants.dart';
 import 'package:evently/shared/widgets/decoration/text_field_decoration.dart';
 import 'package:evently/shared/widgets/form_field_title.dart';
 import 'package:evently/src/partners/services/auth_services.dart';
+import 'package:evently/src/presentations/widgets/create_event_form.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -107,29 +108,19 @@ class _HomeScreenState extends State<HomeScreen> {
   _buildCreateEvents() {
     return showModalBottomSheet(
       context: context,
+      isScrollControlled: true, // Important for full height with keyboard
       builder:
-          (_) => Container(
-            padding: EdgeInsets.all(16),
-            child: Form(
-              onChanged: () {},
-              child: Column(
-                children: [
-                  Expanded(
-                    child: TextFieldFormat(
-                      textFieldName: "Event Name",
-                      textFormField: TextFormField(
-                        // controller: eventNameController
-                        style: Theme.of(context).textTheme.displaySmall,
-                        decoration: TextFormDecoration(context).decoration(
-                          hintText: "Enter Event Name",
-                          errorText: null,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+          (_) => Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 16,
+              bottom:
+                  MediaQuery.of(
+                    context,
+                  ).viewInsets.bottom, // Adjust for keyboard
             ),
+            child: SingleChildScrollView(child: const CreateEventForm()),
           ),
     );
   }
