@@ -1,12 +1,19 @@
+import 'package:evently/core/helper/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:evently/shared/widgets/decoration/text_field_decoration.dart';
 import 'package:evently/shared/widgets/form_field_title.dart';
 
-class CreateEventForm extends StatelessWidget {
+class CreateEventForm extends StatefulWidget {
   const CreateEventForm({super.key});
 
   @override
+  State<CreateEventForm> createState() => _CreateEventFormState();
+}
+
+class _CreateEventFormState extends State<CreateEventForm> {
+  @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return Form(
       onChanged: () {},
       child: Column(
@@ -92,15 +99,66 @@ class CreateEventForm extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Event Location
-          TextFieldFormat(
-            textFieldName: "Event Location",
-            textFormField: TextFormField(
-              decoration: TextFormDecoration(context).decoration(
-                prefixIcon: Icons.location_pin,
-                hintText: "Location",
-                errorText: null,
+          Row(
+            children: [
+              Expanded(
+                child: TextFieldFormat(
+                  textFieldName: "Event Time",
+                  textFormField: TextFormField(
+                    decoration: TextFormDecoration(context).decoration(
+                      prefixIcon: Icons.timelapse,
+                      hintText: "Time",
+                      errorText: null,
+                    ),
+                  ),
+                ),
               ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: TextFieldFormat(
+                  textFieldName: "Location",
+                  textFormField: TextFormField(
+                    decoration: TextFormDecoration(context).decoration(
+                      prefixIcon: Icons.location_pin,
+                      hintText: "Location",
+                      errorText: null,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          VerticalGap.s,
+          GestureDetector(
+            onTap: () {},
+            child: Column(
+              children: [
+                Text(
+                  "Pick Banner Image",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 6),
+                Container(
+                  height: height * 0.2,
+                  width: double.infinity,
+                  // alignment: Alignment.center,
+                  padding: EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.grey.shade300,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.camera_alt, size: 40, color: Colors.grey),
+                      SizedBox(height: 6),
+                      Text("Upload Image"),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20),
+              ],
             ),
           ),
         ],
