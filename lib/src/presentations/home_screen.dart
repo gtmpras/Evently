@@ -102,9 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildStyledButton(
             "Create Events",
             onPressed: () => _buildCreateEvents(),
-            // () {
-            //   context.push(AppRoutes.createEventPage);
-            // },
           ),
           _buildStyledButton(
             "Sign Out",

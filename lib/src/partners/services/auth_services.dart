@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/core/routing/route_constants.dart';
-import 'package:evently/src/partners/models/evently_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -62,44 +61,44 @@ class AuthService {
     }
   }
 
-  //Fetch all the active events from FireStore
-  Future<List<ActiveEvents>> fetchActiveEvents() async {
-    try {
-      var snapshot = await firestore.collection('ActiveEvents').get();
-      return snapshot.docs.map((doc) {
-        return ActiveEvents(
-          docId: doc.id,
-          eventName: doc['eventName'],
-          eventDesc: doc['eventDesc'],
-          location: doc['location'],
-          bannerPhoto: doc['bannerPhoto'],
-          hostName: doc['hostName'],
-          eventDate:
-              (doc['eventDate'] as Timestamp)
-                  .toDate()
-                  .toIso8601String(), //converting eventDate to string format
-        );
-      }).toList();
-    } catch (e) {
-      throw Exception("Error fetching events: $e");
-    }
-  }
+  // //Fetch all the active events from FireStore
+  // Future<List<ActiveEvents>> fetchActiveEvents() async {
+  //   try {
+  //     var snapshot = await firestore.collection('ActiveEvents').get();
+  //     return snapshot.docs.map((doc) {
+  //       return ActiveEvents(
+  //         docId: doc.id,
+  //         eventName: doc['eventName'],
+  //         eventDesc: doc['eventDesc'],
+  //         location: doc['location'],
+  //         bannerPhoto: doc['bannerPhoto'],
+  //         hostName: doc['hostName'],
+  //         eventDate:
+  //             (doc['eventDate'] as Timestamp)
+  //                 .toDate()
+  //                 .toIso8601String(), //converting eventDate to string format
+  //       );
+  //     }).toList();
+  //   } catch (e) {
+  //     throw Exception("Error fetching events: $e");
+  //   }
+  // }
 
-  //Add a new active event
-  Future<void> addActiveEvent(ActiveEvents event) async {
-    try {
-      await firestore.collection('ActiveEvents').add({
-        'eventName': event.eventName,
-        'eventDesc': event.eventDesc,
-        'location': event.location,
-        'bannerPhoto': event.bannerPhoto,
-        'hostName': event.hostName,
-        'eventDate': event.eventDate,
-      });
-    } catch (e) {
-      throw Exception("Error adding event: $e");
-    }
-  }
+  // //Add a new active event
+  // Future<void> addActiveEvent(ActiveEvents event) async {
+  //   try {
+  //     await firestore.collection('ActiveEvents').add({
+  //       'eventName': event.eventName,
+  //       'eventDesc': event.eventDesc,
+  //       'location': event.location,
+  //       'bannerPhoto': event.bannerPhoto,
+  //       'hostName': event.hostName,
+  //       'eventDate': event.eventDate,
+  //     });
+  //   } catch (e) {
+  //     throw Exception("Error adding event: $e");
+  //   }
+  // }
 
   //Logout
   Future<void> signOut(BuildContext context) async {
