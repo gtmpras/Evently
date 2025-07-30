@@ -1,25 +1,17 @@
+import 'dart:developer';
 
+import 'package:evently/src/partners/databases/dbHelper.dart';
+import 'package:evently/src/presentations/create_events/create_event_model.dart';
 import 'package:flutter/material.dart';
 
-class CreateEventState with ChangeNotifier{
-  CreateEventState();
-
-  late BuildContext _context;
-  BuildContext get context => _context;
-
-  set getContext(BuildContext value){
-    _context = value;
-    init();
-  }
-
+class CreateEventState with ChangeNotifier {
+  late Event event;
   bool _isLoading = false;
+  late List<Event> events;
   bool get isLoading => _isLoading;
-  set getLoading(bool value){
-    _isLoading = value;
-    notifyListeners();
-  }
 
-  //controllers for form fields
+
+ //controllers for form fields
   final TextEditingController eventTitleController = TextEditingController();
   final TextEditingController targetAudienceController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -63,7 +55,64 @@ class CreateEventState with ChangeNotifier{
   }
 
   init()async{
-    getLoading = true;
+    initControllers();
     notifyListeners();
   }
+
+  void toggleLoading() {
+    _isLoading = !_isLoading;
+    notifyListeners();
+  }
+
+
+
+  Future refreshEvent(int eventId) async {
+    toggleLoading();
+    event = (await EventDatabase.instance.readEvent(eventId))!;
+    toggleLoading();
+    notifyListeners();
+  }
+
+  Future deleteEvent(int eventId) async {
+    event = (await EventDatabase.instance.readEvent(eventId))!;
+    notifyListeners();
+  }
+
+  Future readAllEvents() async {
+    toggleLoading();
+    events = await EventDatabase.instance.readAllEvents();
+    toggleLoading();
+    notifyListeners();
+  }
+
+  Future addEvent(Event event) async {
+    try {
+      log(" ------------------------------------------------");
+      event = await EventDatabase.instance.create(event);
+      clearControllers();
+      notifyListeners();
+      return "Event Created successfully";
+    } catch (e) {
+      log("------------failed to create event: $e----");
+      return "Failed to create event";
+    }
+  }
 }
+  // CreateEventState();
+
+  // late BuildContext _context;
+  // BuildContext get context => _context;
+
+  // set getContext(BuildContext value){
+  //   _context = value;
+  //   init();
+  // }
+
+  // bool _isLoading = false;
+  // bool get isLoading => _isLoading;
+  // set getLoading(bool value){
+  //   _isLoading = value;
+  //   notifyListeners();
+  // }
+
+  //

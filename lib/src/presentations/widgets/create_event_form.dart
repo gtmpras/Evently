@@ -1,185 +1,225 @@
 import 'package:evently/core/constants/font_constants.dart';
 import 'package:evently/core/helper/gap.dart';
+import 'package:evently/src/presentations/create_events/create_event_model.dart';
+import 'package:evently/src/presentations/create_events/create_event_state.dart';
 import 'package:flutter/material.dart';
 import 'package:evently/shared/widgets/decoration/text_field_decoration.dart';
 import 'package:evently/shared/widgets/form_field_title.dart';
-
-class CreateEventForm extends StatefulWidget {
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+class CreateEventForm extends StatelessWidget {
   const CreateEventForm({super.key});
 
   @override
-  State<CreateEventForm> createState() => _CreateEventFormState();
-}
-
-class _CreateEventFormState extends State<CreateEventForm> {
-  @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    return Form(
-      onChanged: () {},
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Row with Event Title & Target Audience
-          Row(
+
+    return Consumer<CreateEventState>(
+      builder: (context, state, _) {
+        return Form(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: TextFieldFormat(
-                  textFieldName: "Event Title",
-                  textFormField: TextFormField(
-                    decoration: TextFormDecoration(context).decoration(
-                      prefixIcon: Icons.home,
-                      hintText: "Enter Event Name",
-                      errorText: null,
+              // Row with Event Title & Target Audience
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFieldFormat(
+                      textFieldName: "Event Title",
+                      textFormField: TextFormField(
+                        controller: state.eventTitleController,
+                        decoration: TextFormDecoration(context).decoration(
+                          prefixIcon: Icons.home,
+                          hintText: "Enter Event Name",
+                          errorText: null,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              HorizontalGap.xl,
-              Expanded(
-                child: TextFieldFormat(
-                  textFieldName: "Target Audience",
-                  textFormField: TextFormField(
-                    decoration: TextFormDecoration(context).decoration(
-                      prefixIcon: Icons.people,
-                      hintText: "Whom would you target..",
-                      errorText: null,
+                  HorizontalGap.xl,
+                  Expanded(
+                    child: TextFieldFormat(
+                      textFieldName: "Target Audience",
+                      textFormField: TextFormField(
+                        controller: state.targetAudienceController,
+                        decoration: TextFormDecoration(context).decoration(
+                          prefixIcon: Icons.people,
+                          hintText: "Whom would you target..",
+                          errorText: null,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-          VerticalGap.xs,
+              VerticalGap.xs,
 
-          // Description field
-          TextFieldFormat(
-            textFieldName: "Description",
-            textFormField: TextFormField(
-              maxLines: 3,
-              decoration: TextFormDecoration(context).decoration(
-                prefixIcon: Icons.edit,
-                hintText: "Describe your event...",
-                errorText: null,
+              // Description
+              TextFieldFormat(
+                textFieldName: "Description",
+                textFormField: TextFormField(
+                  controller: state.descriptionController,
+                  maxLines: 3,
+                  decoration: TextFormDecoration(context).decoration(
+                    prefixIcon: Icons.edit,
+                    hintText: "Describe your event...",
+                    errorText: null,
+                  ),
+                ),
               ),
-            ),
-          ),
-          VerticalGap.xs,
+              VerticalGap.xs,
+              Divider(),
 
-          Divider(),
+              // Host Name & Date
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFieldFormat(
+                      textFieldName: "Host Name",
+                      textFormField: TextFormField(
+                        controller: state.hostNameController,
+                        decoration: TextFormDecoration(context).decoration(
+                          prefixIcon: Icons.mic_external_on_rounded,
+                          hintText: "Enter Host Name",
+                          errorText: null,
+                        ),
+                      ),
+                    ),
+                  ),
+                  HorizontalGap.xl,
+                  Expanded(
+                    child: TextFieldFormat(
+                      textFieldName: "Event Date",
+                      textFormField: TextFormField(
+                        controller: state.eventDateController,
+                        decoration: TextFormDecoration(context).decoration(
+                          prefixIcon: Icons.calendar_month,
+                          hintText: "Event to go..",
+                          errorText: null,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              VerticalGap.xs,
 
-          // Host Name & Event Date
-          Row(
-            children: [
-              Expanded(
-                child: TextFieldFormat(
-                  textFieldName: "Host Name",
-                  textFormField: TextFormField(
-                    decoration: TextFormDecoration(context).decoration(
-                      prefixIcon: Icons.mic_external_on_rounded,
-                      hintText: "Enter Host Name",
-                      errorText: null,
+              // Time & Location
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFieldFormat(
+                      textFieldName: "Event Time",
+                      textFormField: TextFormField(
+                        controller: state.eventTimeController,
+                        decoration: TextFormDecoration(context).decoration(
+                          prefixIcon: Icons.timelapse,
+                          hintText: "Time",
+                          errorText: null,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              HorizontalGap.xl,
-              Expanded(
-                child: TextFieldFormat(
-                  textFieldName: "Event Date",
-                  textFormField: TextFormField(
-                    decoration: TextFormDecoration(context).decoration(
-                      prefixIcon: Icons.calendar_month,
-                      hintText: "Event to go..",
-                      errorText: null,
+                  HorizontalGap.xl,
+                  Expanded(
+                    child: TextFieldFormat(
+                      textFieldName: "Location",
+                      textFormField: TextFormField(
+                        controller: state.locationController,
+                        decoration: TextFormDecoration(context).decoration(
+                          prefixIcon: Icons.location_pin,
+                          hintText: "Location",
+                          errorText: null,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-          VerticalGap.xs,
+              VerticalGap.s,
 
-          //Time and Location
-          Row(
-            children: [
-              Expanded(
-                child: TextFieldFormat(
-                  textFieldName: "Event Time",
-                  textFormField: TextFormField(
-                    decoration: TextFormDecoration(context).decoration(
-                      prefixIcon: Icons.timelapse,
-                      hintText: "Time",
-                      errorText: null,
+              // Image Picker Placeholder (not wired yet)
+              GestureDetector(
+                onTap: () {
+                  // TODO: Add image picker logic
+                },
+                child: Column(
+                  children: [
+                    Text("Pick Banner Image",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    VerticalGap.xs,
+                    Container(
+                      height: height * 0.2,
+                      width: double.infinity,
+                      padding: EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.grey.shade300,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.camera_alt, size: 40, color: Colors.grey),
+                          VerticalGap.xs,
+                          Text("Upload Image"),
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-              HorizontalGap.xl,
-              Expanded(
-                child: TextFieldFormat(
-                  textFieldName: "Location",
-                  textFormField: TextFormField(
-                    decoration: TextFormDecoration(context).decoration(
-                      prefixIcon: Icons.location_pin,
-                      hintText: "Location",
-                      errorText: null,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          VerticalGap.s,
-          GestureDetector(
-            onTap: () {},
-            child: Column(
-              children: [
-                Text(
-                  "Pick Banner Image",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                VerticalGap.xs,
-                Container(
-                  height: height * 0.2,
+
+              // Confirm Button
+              VerticalGap.s,
+              InkWell(
+                onTap: () async {
+                  print("button tapped");
+                  try {
+                    final parsedDate = DateFormat("yyyy-MM-dd").parse(
+                      state.eventDateController.text.trim(),
+                    );
+                    final parsedTime = DateFormat("HH:mm").parse(
+                      state.eventTimeController.text.trim(),
+                    );
+
+                    final event = Event(
+                      eventTitle: state.eventTitleController.text.trim(),
+                      targetAudience:
+                          state.targetAudienceController.text.trim(),
+                      description: state.descriptionController.text.trim(),
+                      hostName: state.hostNameController.text.trim(),
+                      eventDate: parsedDate,
+                      eventTime: parsedTime,
+                      location: state.locationController.text.trim(),
+                    );
+
+                    final result = await state.addEvent(event);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Successfully submitted datas")),
+                    );
+                  } catch (_) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Invalid date/time format")),
+                    );
+                  }
+                },
+                child: Container(
                   width: double.infinity,
-                  // alignment: Alignment.center,
-                  padding: EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0, vertical: 12.0),
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Colors.purpleAccent.shade100,
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(Icons.camera_alt, size: 40, color: Colors.grey),
-                      VerticalGap.xs,
-                      Text("Upload Image"),
-                    ],
-                  ),
+                  child: Text("Confirm", style: AppFonts.buttonText),
                 ),
-                VerticalGap.xs,
-              ],
-            ),
+              ),
+              VerticalGap.xs,
+            ],
           ),
-
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10.0,
-              vertical: 12.0,
-            ),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              color: Colors.purpleAccent.shade100,
-            ),
-            child: Text("Confirm", style: AppFonts.buttonText),
-          ),
-          VerticalGap.xs,
-        ],
-      ),
+        );
+      },
     );
   }
 }
