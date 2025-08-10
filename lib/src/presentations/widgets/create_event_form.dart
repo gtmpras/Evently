@@ -143,7 +143,7 @@ class CreateEventForm extends StatelessWidget {
               // Image Picker Placeholder (not wired yet)
               GestureDetector(
                 onTap: () {
-                  // TODO: Add image picker logic
+                  state.takeSnapshot();
                 },
                 child: Column(
                   children: [
@@ -158,7 +158,18 @@ class CreateEventForm extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10.0),
                         color: Colors.grey.shade300,
                       ),
-                      child: Column(
+                      child: state.imgFile != null? 
+                        ClipRRect(
+                          borderRadius: BorderRadiusGeometry.circular(10.0),
+                          child: Image.file(
+                            state.imgFile!,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                        ):
+                      
+                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
                           Icon(Icons.camera_alt, size: 40, color: Colors.grey),

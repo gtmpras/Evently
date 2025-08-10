@@ -1,8 +1,10 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:evently/src/partners/databases/dbHelper.dart';
 import 'package:evently/src/presentations/create_events/create_event_model.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class CreateEventState with ChangeNotifier {
@@ -114,6 +116,7 @@ Future<String> submitEvent() async {
       eventDate: parsedDate,
       eventTime: parsedTime,
       location: locationController.text.trim(),
+      bannerImg: bannerImgController.text.trim()
       // bannerImg maybe add here if needed
     );
 
@@ -155,4 +158,22 @@ if (pickedTime != null){
   notifyListeners();
 }
 }
+
+//For image picker
+File? _imgFile;
+File? get imgFile => _imgFile;
+
+void takeSnapshot() async{
+  final ImagePicker picker = ImagePicker();
+  final XFile? img = await picker.pickImage(
+    source: ImageSource.gallery,
+    maxWidth: 400,
+    );
+    if (img == null) return;
+
+    _imgFile = File(img.path);
+    bannerImgController.text = img.path;
+    notifyListeners();
+}
+
 }

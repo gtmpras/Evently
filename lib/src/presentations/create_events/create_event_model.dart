@@ -98,6 +98,7 @@ class EventFields {
     eventDate,
     eventTime,
     location,
+    bannerImg
   ];
 
   static final String id = '_id';
@@ -108,6 +109,7 @@ class EventFields {
   static final String eventDate = 'eventDate';
   static final String eventTime = 'eventTime';
   static final String location = 'location';
+  static final String bannerImg = 'bannerImg';
 }
 
 class Event {
@@ -119,6 +121,7 @@ class Event {
   final DateTime eventDate;
   final DateTime eventTime;
   final String location;
+  final String bannerImg;
 
   const Event({
     this.id,
@@ -129,6 +132,7 @@ class Event {
     required this.eventDate,
     required this.eventTime,
     required this.location,
+    required this.bannerImg
   });
 
   Event copy({
@@ -140,6 +144,7 @@ class Event {
     DateTime? eventDate,
     DateTime? eventTime,
     String? location,
+    String? bannerImg,
   }) =>
       Event(
         id: id ?? this.id,
@@ -150,6 +155,7 @@ class Event {
         eventDate: eventDate ?? this.eventDate,
         eventTime: eventTime ?? this.eventTime,
         location: location ?? this.location,
+        bannerImg: bannerImg ?? this.bannerImg
       );
 
   static Event fromJson(Map<String, Object?> json) => Event(
@@ -161,6 +167,8 @@ class Event {
         eventDate: DateTime.parse(json[EventFields.eventDate] as String),
         eventTime: DateTime.parse(json[EventFields.eventTime] as String),
         location: json[EventFields.location] as String,
+        bannerImg: json[EventFields.bannerImg] as String
+        
       );
 
   Map<String, Object?> toJson() => {
@@ -172,5 +180,6 @@ class Event {
         EventFields.eventDate: eventDate.toIso8601String(),
         EventFields.eventTime: eventTime.toIso8601String(),
         EventFields.location: location,
+        EventFields.bannerImg: bannerImg
       };
 }

@@ -47,7 +47,8 @@ CREATE TABLE $tableEvents(
   ${EventFields.hostName} $textType,
   ${EventFields.eventDate} $textType,
   ${EventFields.eventTime} $textType,
-  ${EventFields.location} $textType
+  ${EventFields.location} $textType,
+  ${EventFields.bannerImg} $textType
 )
 ''');
   }
