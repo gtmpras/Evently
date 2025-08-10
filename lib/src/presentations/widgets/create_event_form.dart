@@ -174,36 +174,9 @@ class CreateEventForm extends StatelessWidget {
               // Confirm Button
               VerticalGap.s,
               InkWell(
-                onTap: () async {
-                  print("button tapped");
-                  try {
-                    final parsedDate = DateFormat("yyyy-MM-dd").parse(
-                      state.eventDateController.text.trim(),
-                    );
-                    final parsedTime = DateFormat("HH:mm").parse(
-                      state.eventTimeController.text.trim(),
-                    );
-
-                    final event = Event(
-                      eventTitle: state.eventTitleController.text.trim(),
-                      targetAudience:
-                          state.targetAudienceController.text.trim(),
-                      description: state.descriptionController.text.trim(),
-                      hostName: state.hostNameController.text.trim(),
-                      eventDate: parsedDate,
-                      eventTime: parsedTime,
-                      location: state.locationController.text.trim(),
-                    );
-
-                    final result = await state.addEvent(event);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Successfully submitted datas")),
-                    );
-                  } catch (_) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Invalid date/time format")),
-                    );
-                  }
+                onTap: ()  {
+                  final result =  state.submitEvent();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Event Successfully added")));
                 },
                 child: Container(
                   width: double.infinity,

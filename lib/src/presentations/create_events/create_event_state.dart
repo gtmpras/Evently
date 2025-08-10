@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:evently/src/partners/databases/dbHelper.dart';
 import 'package:evently/src/presentations/create_events/create_event_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CreateEventState with ChangeNotifier {
   late Event event;
@@ -90,6 +91,7 @@ class CreateEventState with ChangeNotifier {
       log(" ------------------------------------------------");
       event = await EventDatabase.instance.create(event);
       clearControllers();
+      
       notifyListeners();
       return "Event Created successfully";
     } catch (e) {
@@ -97,6 +99,30 @@ class CreateEventState with ChangeNotifier {
       return "Failed to create event";
     }
   }
+
+  // Inside CreateEventState class
+Future<String> submitEvent() async {
+  try {
+    final parsedDate = DateFormat("yyyy-MM-dd").parse(eventDateController.text.trim());
+    final parsedTime = DateFormat("HH:mm").parse(eventTimeController.text.trim());
+
+    final event = Event(
+      eventTitle: eventTitleController.text.trim(),
+      targetAudience: targetAudienceController.text.trim(),
+      description: descriptionController.text.trim(),
+      hostName: hostNameController.text.trim(),
+      eventDate: parsedDate,
+      eventTime: parsedTime,
+      location: locationController.text.trim(),
+      // bannerImg maybe add here if needed
+    );
+
+    return await addEvent(event);
+  } catch (e) {
+    return "Invalid date/time or missing fields";
+  }
+}
+
 
   //For date picker
 Future<void> pickEventDate(BuildContext context) async {
