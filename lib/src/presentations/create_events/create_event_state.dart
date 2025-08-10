@@ -97,22 +97,36 @@ class CreateEventState with ChangeNotifier {
       return "Failed to create event";
     }
   }
+
+  //For date picker
+Future<void> pickEventDate(BuildContext context) async {
+  DateTime? pickedDate = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2000),
+    lastDate: DateTime(2100),
+  );
+
+  if (pickedDate != null) {
+    String formattedDate =
+        '${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}';
+    eventDateController.text = formattedDate;
+    notifyListeners();
+  }
 }
-  // CreateEventState();
 
-  // late BuildContext _context;
-  // BuildContext get context => _context;
+//for time picker
+Future<void> pickEventTime(BuildContext context)async{
+  TimeOfDay? pickedTime = await showTimePicker(
+    context: context,
+    initialTime: TimeOfDay.now(),
+    initialEntryMode: TimePickerEntryMode.input
+    );
 
-  // set getContext(BuildContext value){
-  //   _context = value;
-  //   init();
-  // }
-
-  // bool _isLoading = false;
-  // bool get isLoading => _isLoading;
-  // set getLoading(bool value){
-  //   _isLoading = value;
-  //   notifyListeners();
-  // }
-
-  //
+if (pickedTime != null){
+  final formattedTime = pickedTime.format(context);
+  eventTimeController.text = formattedTime;
+  notifyListeners();
+}
+}
+}
