@@ -55,6 +55,9 @@ class CreateEventState with ChangeNotifier {
     eventTimeController.clear();
     locationController.clear();
     bannerImgController.clear();
+
+    _imgFile = null; 
+    notifyListeners();
   }
 
   init()async{
@@ -117,7 +120,6 @@ Future<String> submitEvent() async {
       eventTime: parsedTime,
       location: locationController.text.trim(),
       bannerImg: bannerImgController.text.trim()
-      // bannerImg maybe add here if needed
     );
 
     return await addEvent(event);
