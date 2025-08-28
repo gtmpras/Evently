@@ -8,6 +8,8 @@ class AppRoutes {
   //Splash Screen
   static const String splash = '/splash';
 
+  //My Events Screen
+  static const String myEvent = '/myEvent';
   //Login Router
   static const String login = '/';
 
@@ -16,4 +18,6 @@ class AppRoutes {
 
   //Authcheck route
   static const String authCheck = '/authCheck';
+
+
 }

@@ -2,6 +2,7 @@ import 'package:evently/src/pages/create_events_page.dart';
 import 'package:evently/src/partners/services/auth_check.dart';
 import 'package:evently/src/presentations/home_screen.dart';
 import 'package:evently/src/presentations/login_screen.dart';
+import 'package:evently/src/presentations/my_events/my_event_screen.dart';
 import 'package:evently/src/presentations/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -38,6 +39,13 @@ class AppRouter {
         path: AppRoutes.login,
         name: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
+      ),
+
+      // MyEvent Screen
+      GoRoute(
+        path: AppRoutes.myEvent,
+        name: AppRoutes.myEvent,
+        builder: (context, state) => const MyEventScreen(),
       ),
 
       //CreateEvent Page

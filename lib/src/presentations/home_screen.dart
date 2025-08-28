@@ -4,6 +4,7 @@ import 'package:evently/core/routing/route_constants.dart';
 import 'package:evently/src/partners/services/auth_services.dart';
 import 'package:evently/src/presentations/widgets/create_event_form.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -97,8 +98,12 @@ class _HomeScreenState extends State<HomeScreen> {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          _buildStyledButton("My Events", onPressed: () {}),
-          _buildStyledButton("Find Events", onPressed: () {}),
+          _buildStyledButton("My Events", onPressed: () {
+            context.go('/myEvent');
+          }),
+          _buildStyledButton("Find Events", onPressed: () {
+
+          }),
           _buildStyledButton(
             "Create Events",
             onPressed: () => _buildCreateEvents(),
