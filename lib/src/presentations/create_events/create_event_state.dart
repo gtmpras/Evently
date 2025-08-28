@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:evently/src/partners/databases/dbHelper.dart';
 import 'package:evently/src/presentations/create_events/create_event_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -13,10 +14,10 @@ class CreateEventState with ChangeNotifier {
   late List<Event> events;
   bool get isLoading => _isLoading;
 
-
- //controllers for form fields
+  //controllers for form fields
   final TextEditingController eventTitleController = TextEditingController();
-  final TextEditingController targetAudienceController = TextEditingController();
+  final TextEditingController targetAudienceController =
+      TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController hostNameController = TextEditingController();
   final TextEditingController eventDateController = TextEditingController();
@@ -24,7 +25,7 @@ class CreateEventState with ChangeNotifier {
   final TextEditingController locationController = TextEditingController();
   final TextEditingController bannerImgController = TextEditingController();
 
-  void initControllers(){
+  void initControllers() {
     eventTitleController.text = "";
     targetAudienceController.text = "";
     descriptionController.text = "";
@@ -35,7 +36,7 @@ class CreateEventState with ChangeNotifier {
     bannerImgController.text = "";
   }
 
-  void disposeControllers(){
+  void disposeControllers() {
     eventTitleController.dispose();
     targetAudienceController.dispose();
     descriptionController.dispose();
@@ -46,7 +47,7 @@ class CreateEventState with ChangeNotifier {
     bannerImgController.dispose();
   }
 
-  void clearControllers(){
+  void clearControllers() {
     eventTitleController.clear();
     targetAudienceController.clear();
     descriptionController.clear();
@@ -56,11 +57,11 @@ class CreateEventState with ChangeNotifier {
     locationController.clear();
     bannerImgController.clear();
 
-    _imgFile = null; 
+    _imgFile = null;
     notifyListeners();
   }
 
-  init()async{
+  init() async {
     initControllers();
     notifyListeners();
   }
@@ -69,8 +70,6 @@ class CreateEventState with ChangeNotifier {
     _isLoading = !_isLoading;
     notifyListeners();
   }
-
-
 
   Future refreshEvent(int eventId) async {
     toggleLoading();
@@ -86,7 +85,12 @@ class CreateEventState with ChangeNotifier {
 
   Future readAllEvents() async {
     toggleLoading();
-    events = await EventDatabase.instance.readAllEvents();
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      events = await EventDatabase.instance.readUserEvents(currentUser.uid);
+    }else{
+      events = [];
+    }
     toggleLoading();
     notifyListeners();
   }
@@ -96,7 +100,7 @@ class CreateEventState with ChangeNotifier {
       log(" ------------------------------------------------");
       event = await EventDatabase.instance.create(event);
       clearControllers();
-      
+
       notifyListeners();
       return "Event Created successfully";
     } catch (e) {
@@ -106,76 +110,82 @@ class CreateEventState with ChangeNotifier {
   }
 
   // Inside CreateEventState class
-Future<String> submitEvent() async {
-  try {
-    final parsedDate = DateFormat("yyyy-MM-dd").parse(eventDateController.text.trim());
-    final parsedTime = DateFormat("HH:mm").parse(eventTimeController.text.trim());
+  Future<String> submitEvent() async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser == null) return "User not logged in";
 
-    final event = Event(
-      eventTitle: eventTitleController.text.trim(),
-      targetAudience: targetAudienceController.text.trim(),
-      description: descriptionController.text.trim(),
-      hostName: hostNameController.text.trim(),
-      eventDate: parsedDate,
-      eventTime: parsedTime,
-      location: locationController.text.trim(),
-      bannerImg: bannerImgController.text.trim()
-    );
+      final parsedDate = DateFormat(
+        "yyyy-MM-dd",
+      ).parse(eventDateController.text.trim());
+      final parsedTime = DateFormat(
+        "HH:mm",
+      ).parse(eventTimeController.text.trim());
 
-    return await addEvent(event);
-  } catch (e) {
-    return "Invalid date/time or missing fields";
+      final event = Event(
+        uid: currentUser.uid, // link event to Firebase user
+        eventTitle: eventTitleController.text.trim(),
+        targetAudience: targetAudienceController.text.trim(),
+        description: descriptionController.text.trim(),
+        hostName: hostNameController.text.trim(),
+        eventDate: parsedDate,
+        eventTime: parsedTime,
+        location: locationController.text.trim(),
+        bannerImg: bannerImgController.text.trim(),
+      );
+
+      return await addEvent(event);
+    } catch (e) {
+      return "Invalid date/time or missing fields";
+    }
   }
-}
-
 
   //For date picker
-Future<void> pickEventDate(BuildContext context) async {
-  DateTime? pickedDate = await showDatePicker(
-    context: context,
-    initialDate: DateTime.now(),
-    firstDate: DateTime(2000),
-    lastDate: DateTime(2100),
-  );
-
-  if (pickedDate != null) {
-    String formattedDate =
-        '${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}';
-    eventDateController.text = formattedDate;
-    notifyListeners();
-  }
-}
-
-//for time picker
-Future<void> pickEventTime(BuildContext context)async{
-  TimeOfDay? pickedTime = await showTimePicker(
-    context: context,
-    initialTime: TimeOfDay.now(),
-    initialEntryMode: TimePickerEntryMode.input
+  Future<void> pickEventDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
     );
 
-if (pickedTime != null){
-  final formattedTime = pickedTime.format(context);
-  eventTimeController.text = formattedTime;
-  notifyListeners();
-}
-}
+    if (pickedDate != null) {
+      String formattedDate =
+          '${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}';
+      eventDateController.text = formattedDate;
+      notifyListeners();
+    }
+  }
 
-//For image picker
-File? _imgFile;
-File? get imgFile => _imgFile;
+  //for time picker
+  Future<void> pickEventTime(BuildContext context) async {
+    TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      initialEntryMode: TimePickerEntryMode.input,
+    );
 
-void takeSnapshot() async{
-  final ImagePicker picker = ImagePicker();
-  final XFile? img = await picker.pickImage(
-    source: ImageSource.gallery,
-    maxWidth: 400,
+    if (pickedTime != null) {
+      final formattedTime = pickedTime.format(context);
+      eventTimeController.text = formattedTime;
+      notifyListeners();
+    }
+  }
+
+  //For image picker
+  File? _imgFile;
+  File? get imgFile => _imgFile;
+
+  void takeSnapshot() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? img = await picker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 400,
     );
     if (img == null) return;
 
     _imgFile = File(img.path);
     bannerImgController.text = img.path;
     notifyListeners();
-}
-
+  }
 }

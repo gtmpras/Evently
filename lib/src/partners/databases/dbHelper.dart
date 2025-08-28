@@ -41,6 +41,7 @@ class EventDatabase {
     await db.execute('''
 CREATE TABLE $tableEvents(
   ${EventFields.id} $idType,
+  ${EventFields.uid} $textType,
   ${EventFields.eventTitle} $textType,
   ${EventFields.targetAudience} $textType,
   ${EventFields.description} $textType,
@@ -71,19 +72,17 @@ CREATE TABLE $tableEvents(
       where: '${EventFields.id} = ?',
       whereArgs: [id],
     );
-
-    if (maps.isNotEmpty) {
-      return Event.fromJson(maps.first);
-    } else {
-      return null;
-    }
+    return maps.isNotEmpty ? Event.fromJson(maps.first) : null;
   }
 
   // Read all events, and if not found then return null
-  Future<List<Event>> readAllEvents() async {
+  Future<List<Event>> readUserEvents(String uid) async {
     final db = await instance.database;
-    final orderBy = '${EventFields.eventDate} ASC';
-    final result = await db.query(tableEvents, orderBy: orderBy);
+    final result = await db.query(
+      tableEvents,
+      where: '${EventFields.uid} = ?',
+      whereArgs: [uid],
+      orderBy: '${EventFields.eventDate} ASC');
 
     return result.map((json) => Event.fromJson(json)).toList();
   }
