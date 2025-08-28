@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:evently/src/presentations/create_events/create_event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; 
@@ -11,6 +13,13 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ImageProvider backgroundImage;
+
+    if(event.bannerImg.isNotEmpty){
+      backgroundImage = FileImage(File(event.bannerImg));
+    }else{
+      backgroundImage = const AssetImage('images/event.jpg');
+    }
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -19,9 +28,7 @@ class EventCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           image: DecorationImage(
-            image: event.bannerImg.startsWith('http')
-                ? NetworkImage(event.bannerImg)
-                : AssetImage(event.bannerImg) as ImageProvider,
+            image: backgroundImage,
             fit: BoxFit.cover,
           ),
           boxShadow: [

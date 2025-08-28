@@ -15,6 +15,7 @@ class MyEventScreen extends StatelessWidget {
       create: (_) => MyEventState(),
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: true,
           backgroundColor: Colors.deepPurple,
           title: Text(
             "My Events",
@@ -35,10 +36,6 @@ class MyEventScreen extends StatelessWidget {
                   final event = state.events[index];
                   return EventCard(
                     event: event,
-                    onTap: () {
-                      // Navigate to event details
-                      // context.push('/event/${event.id}');
-                    },
                   );
                 },
               );
