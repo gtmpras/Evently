@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         children: [
           _buildStyledButton("My Events", onPressed: () {
-            context.go('/myEvent');
+            context.push('/myEvent');
           }),
           _buildStyledButton("Find Events", onPressed: () {
 

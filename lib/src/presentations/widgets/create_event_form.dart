@@ -1,11 +1,10 @@
 import 'package:evently/core/constants/font_constants.dart';
 import 'package:evently/core/helper/gap.dart';
-import 'package:evently/src/presentations/create_events/create_event_model.dart';
 import 'package:evently/src/presentations/create_events/create_event_state.dart';
 import 'package:flutter/material.dart';
 import 'package:evently/shared/widgets/decoration/text_field_decoration.dart';
 import 'package:evently/shared/widgets/form_field_title.dart';
-import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 class CreateEventForm extends StatelessWidget {
   const CreateEventForm({super.key});
@@ -185,9 +184,14 @@ class CreateEventForm extends StatelessWidget {
               // Confirm Button
               VerticalGap.s,
               InkWell(
-                onTap: ()  {
-                  final result =  state.submitEvent();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Event Successfully added")));
+                onTap: () async {
+                  final success =await  state.submitEvent(context);
+                  if(success){
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Event Successfully added")));
+                    context.go('/home');
+                  }else{
+                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to add event")));
+                  }
                 },
                 child: Container(
                   width: double.infinity,

@@ -11,37 +11,35 @@ class MyEventScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => MyEventState(),
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: true,
-          backgroundColor: Colors.deepPurple,
-          title: Text(
-            "My Events",
-            style: AppFonts.headingL.copyWith(color: Colors.white),
-          ),
-          centerTitle: true,
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.deepPurple,
+        title: Text(
+          "My Events",
+          style: AppFonts.headingL.copyWith(color: Colors.white),
         ),
-        body: Consumer<MyEventState>(
-          builder: (context, state, _) {
-            if (state.isLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state.events.isEmpty) {
-              return const Center(child: Text("No events found"));
-            } else {
-              return ListView.builder(
-                itemCount: state.events.length,
-                itemBuilder: (context, index) {
-                  final event = state.events[index];
-                  return EventCard(
-                    event: event,
-                  );
-                },
-              );
-            }
-          },
-        ),
+        centerTitle: true,
+      ),
+      body: Consumer<MyEventState>(
+        builder: (context, state, _) {
+          if (state.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state.events.isEmpty) {
+            return const Center(child: Text("No events found"));
+          } else {
+            return ListView.builder(
+              itemCount: state.events.length,
+              itemBuilder: (context, index) {
+                final event = state.events[index];
+                return EventCard(
+                  event: event,
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }

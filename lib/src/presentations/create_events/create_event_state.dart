@@ -11,13 +11,14 @@ import 'package:intl/intl.dart';
 class CreateEventState with ChangeNotifier {
   late Event event;
   bool _isLoading = false;
-  late List<Event> events;
   bool get isLoading => _isLoading;
 
-  //controllers for form fields
+  // Initialize events list
+  List<Event> events = [];
+
+  // Controllers for form fields
   final TextEditingController eventTitleController = TextEditingController();
-  final TextEditingController targetAudienceController =
-      TextEditingController();
+  final TextEditingController targetAudienceController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController hostNameController = TextEditingController();
   final TextEditingController eventDateController = TextEditingController();
@@ -25,6 +26,10 @@ class CreateEventState with ChangeNotifier {
   final TextEditingController locationController = TextEditingController();
   final TextEditingController bannerImgController = TextEditingController();
 
+  File? _imgFile;
+  File? get imgFile => _imgFile;
+
+  // Initialize controllers
   void initControllers() {
     eventTitleController.text = "";
     targetAudienceController.text = "";
@@ -36,6 +41,7 @@ class CreateEventState with ChangeNotifier {
     bannerImgController.text = "";
   }
 
+  // Dispose controllers
   void disposeControllers() {
     eventTitleController.dispose();
     targetAudienceController.dispose();
@@ -47,6 +53,7 @@ class CreateEventState with ChangeNotifier {
     bannerImgController.dispose();
   }
 
+  // Clear controllers and image
   void clearControllers() {
     eventTitleController.clear();
     targetAudienceController.clear();
@@ -61,86 +68,73 @@ class CreateEventState with ChangeNotifier {
     notifyListeners();
   }
 
-  init() async {
-    initControllers();
-    notifyListeners();
-  }
-
   void toggleLoading() {
     _isLoading = !_isLoading;
     notifyListeners();
   }
 
-  Future refreshEvent(int eventId) async {
-    toggleLoading();
-    event = (await EventDatabase.instance.readEvent(eventId))!;
-    toggleLoading();
-    notifyListeners();
-  }
-
-  Future deleteEvent(int eventId) async {
-    event = (await EventDatabase.instance.readEvent(eventId))!;
-    notifyListeners();
-  }
-
+  // Read all events of current user
   Future readAllEvents() async {
     toggleLoading();
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       events = await EventDatabase.instance.readUserEvents(currentUser.uid);
-    }else{
+    } else {
       events = [];
     }
     toggleLoading();
     notifyListeners();
   }
 
-  Future addEvent(Event event) async {
+  // Add event to DB and list
+  Future<String> addEvent(Event event) async {
     try {
-      log(" ------------------------------------------------");
       event = await EventDatabase.instance.create(event);
+      events.add(event);
       clearControllers();
-
       notifyListeners();
       return "Event Created successfully";
     } catch (e) {
-      log("------------failed to create event: $e----");
+      log("Failed to create event: $e");
       return "Failed to create event";
     }
   }
 
-  // Inside CreateEventState class
-  Future<String> submitEvent() async {
+  // Submit event with proper date/time parsing
+  Future<bool> submitEvent(BuildContext context) async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) return false;
+
+    DateTime parsedDate;
+    DateTime parsedTime;
+
     try {
-      final currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser == null) return "User not logged in";
-
-      final parsedDate = DateFormat(
-        "yyyy-MM-dd",
-      ).parse(eventDateController.text.trim());
-      final parsedTime = DateFormat(
-        "HH:mm",
-      ).parse(eventTimeController.text.trim());
-
-      final event = Event(
-        uid: currentUser.uid, // link event to Firebase user
-        eventTitle: eventTitleController.text.trim(),
-        targetAudience: targetAudienceController.text.trim(),
-        description: descriptionController.text.trim(),
-        hostName: hostNameController.text.trim(),
-        eventDate: parsedDate,
-        eventTime: parsedTime,
-        location: locationController.text.trim(),
-        bannerImg: bannerImgController.text.trim(),
+      parsedDate = DateFormat("yyyy-MM-dd").parse(eventDateController.text.trim());
+      parsedTime = DateFormat("HH:mm").parse(eventTimeController.text.trim());
+    } catch (_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Invalid date or time format")),
       );
-
-      return await addEvent(event);
-    } catch (e) {
-      return "Invalid date/time or missing fields";
+      return false;
     }
+
+    final event = Event(
+      uid: currentUser.uid,
+      eventTitle: eventTitleController.text.trim(),
+      targetAudience: targetAudienceController.text.trim(),
+      description: descriptionController.text.trim(),
+      hostName: hostNameController.text.trim(),
+      eventDate: parsedDate,
+      eventTime: parsedTime,
+      location: locationController.text.trim(),
+      bannerImg: bannerImgController.text.trim(),
+    );
+
+    final message = await addEvent(event);
+    return message == "Event Created successfully";
   }
 
-  //For date picker
+  // Date picker
   Future<void> pickEventDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -157,7 +151,7 @@ class CreateEventState with ChangeNotifier {
     }
   }
 
-  //for time picker
+  // Time picker (24-hour format)
   Future<void> pickEventTime(BuildContext context) async {
     TimeOfDay? pickedTime = await showTimePicker(
       context: context,
@@ -166,16 +160,14 @@ class CreateEventState with ChangeNotifier {
     );
 
     if (pickedTime != null) {
-      final formattedTime = pickedTime.format(context);
+      final formattedTime =
+          '${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}';
       eventTimeController.text = formattedTime;
       notifyListeners();
     }
   }
 
-  //For image picker
-  File? _imgFile;
-  File? get imgFile => _imgFile;
-
+  // Pick image
   void takeSnapshot() async {
     final ImagePicker picker = ImagePicker();
     final XFile? img = await picker.pickImage(
