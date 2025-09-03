@@ -9,7 +9,10 @@ class MyEventState extends ChangeNotifier {
   bool isLoading = true;
 
   MyEventState() {
+    FirebaseAuth.instance.authStateChanges().listen((user){
     fetchEvents();
+    });
+    
   }
 
   Future<void> fetchEvents() async {

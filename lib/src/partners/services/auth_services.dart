@@ -30,6 +30,7 @@ class AuthService {
           'email': user.email ?? "",
           'createdAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
+        debugPrint(user.email);
         return true;
       }
     } catch (e) {

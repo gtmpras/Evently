@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:evently/src/partners/databases/dbHelper.dart';
 import 'package:evently/src/presentations/create_events/create_event_model.dart';
+import 'package:evently/src/presentations/my_events/my_event_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CreateEventState with ChangeNotifier {
   late Event event;
@@ -87,10 +89,13 @@ class CreateEventState with ChangeNotifier {
   }
 
   // Add event to DB and list
-  Future<String> addEvent(Event event) async {
+  Future<String> addEvent(Event event, BuildContext context) async {
     try {
       event = await EventDatabase.instance.create(event);
       events.add(event);
+       // 🔑 Refresh MyEventState so MyEventScreen updates instantly
+      await context.read<MyEventState>().fetchEvents();
+
       clearControllers();
       notifyListeners();
       return "Event Created successfully";
@@ -130,7 +135,7 @@ class CreateEventState with ChangeNotifier {
       bannerImg: bannerImgController.text.trim(),
     );
 
-    final message = await addEvent(event);
+    final message = await addEvent(event, context);
     return message == "Event Created successfully";
   }
 
