@@ -93,7 +93,6 @@ class CreateEventState with ChangeNotifier {
     try {
       event = await EventDatabase.instance.create(event);
       events.add(event);
-       // 🔑 Refresh MyEventState so MyEventScreen updates instantly
       await context.read<MyEventState>().fetchEvents();
 
       clearControllers();

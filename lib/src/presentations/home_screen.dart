@@ -102,6 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
             context.push('/myEvent');
           }),
           _buildStyledButton("Find Events", onPressed: () {
+            context.push('/findEvent');
 
           }),
           _buildStyledButton(

@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:evently/src/presentations/create_events/create_event_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -86,6 +88,17 @@ CREATE TABLE $tableEvents(
 
     return result.map((json) => Event.fromJson(json)).toList();
   }
+
+  //Read Other users events.
+  Future<List<Event>> readOtherUsersEvents(String currentUid) async {
+  final db = await instance.database;
+  final result = await db.query(
+    'events',
+    where: 'uid != ?',
+    whereArgs: [currentUid],
+  );
+  return result.map((json) => Event.fromJson(json)).toList();
+}
 
   // Update an exisiting event and matches the event by it's ID and replaces the old datas
   Future<int> update(Event event) async {

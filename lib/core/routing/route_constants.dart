@@ -10,6 +10,10 @@ class AppRoutes {
 
   //My Events Screen
   static const String myEvent = '/myEvent';
+
+   //Find Events Screen
+  static const String findEvent = '/findEvent';
+  
   //Login Router
   static const String login = '/';
 

@@ -1,5 +1,6 @@
 import 'package:evently/src/pages/create_events_page.dart';
 import 'package:evently/src/partners/services/auth_check.dart';
+import 'package:evently/src/presentations/find_events/find_events_screen.dart';
 import 'package:evently/src/presentations/home_screen.dart';
 import 'package:evently/src/presentations/login_screen.dart';
 import 'package:evently/src/presentations/my_events/my_event_screen.dart';
@@ -48,6 +49,12 @@ class AppRouter {
         builder: (context, state) => const MyEventScreen(),
       ),
 
+      // FindEvent Screen
+      GoRoute(
+        path: AppRoutes.findEvent,
+        name: AppRoutes.findEvent,
+        builder: (context, state) => const FindEventScreen(),
+      ),
       //CreateEvent Page
       GoRoute(
         path: AppRoutes.createEventPage,
