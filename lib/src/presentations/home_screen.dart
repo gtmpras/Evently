@@ -7,6 +7,7 @@ import 'package:evently/src/partners/services/auth_services.dart';
 import 'package:evently/src/presentations/widgets/create_event_form.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,20 +23,43 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildWelcomeBanner(),
-              VerticalGap.m,
-              _buildDescriptionSection(),
-              VerticalGap.xxs,
-              Text("Platform Stats", style: AppFonts.heading),
-              VerticalGap.xxs,
-              Expanded(child: SingleChildScrollView(child: _buildGridView()))
-            ],
-          ),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildWelcomeBanner(),
+                  VerticalGap.m,
+                  _buildDescriptionSection(),
+                  VerticalGap.xxs,
+                  Text("Platform Stats", style: AppFonts.heading),
+                  VerticalGap.xxs,
+                  Expanded(
+                    child: SingleChildScrollView(child: _buildGridView()),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: 1,
+              child: GestureDetector(
+                onTap: () {
+                  debugPrint("Customer Support tapped");
+                },
+                child: SizedBox(
+                  height: 120,
+                  width: 100,
+                  child: Lottie.asset(
+                    'images/waving.json',
+                    fit: BoxFit.fill,
+                    repeat: true,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
 
@@ -69,7 +93,10 @@ class _HomeScreenState extends State<HomeScreen> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 35),
       decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage('images/event_room.PNG'),fit: BoxFit.cover),
+        image: DecorationImage(
+          image: AssetImage('images/event_room.PNG'),
+          fit: BoxFit.cover,
+        ),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -126,48 +153,48 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-Widget _buildGridView() {
-  final List<String> imagePaths = [
-    "images/download.png",
-    "images/profile.png",
-    "images/headphone.png",
-    "images/favoriteseller.png",
-  ];
-  final List<String> downloadCounts = ["2.5K", "1.5K", "82", "40"];
-  final List<String> downloadLabels = [
-    "Downloads",
-    "Users",
-    "Files",
-    "Places",
-  ];
-  final List<Color> cardColors = [
-    Colors.deepPurple.shade100,
-    Colors.blue.shade100,
-    Colors.orange.shade100,
-    Colors.green.shade100,
-  ];
 
-  return GridView.builder(
-    shrinkWrap: true,
-    physics: const NeverScrollableScrollPhysics(),
-    itemCount: imagePaths.length,
-    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 2,
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
-      childAspectRatio: 1,
-    ),
-    itemBuilder: (context, index) {
+  Widget _buildGridView() {
+    final List<String> imagePaths = [
+      "images/download.png",
+      "images/profile.png",
+      "images/headphone.png",
+      "images/favoriteseller.png",
+    ];
+    final List<String> downloadCounts = ["2.5K", "1.5K", "82", "40"];
+    final List<String> downloadLabels = [
+      "Downloads",
+      "Users",
+      "Files",
+      "Places",
+    ];
+    final List<Color> cardColors = [
+      Colors.deepPurple.shade100,
+      Colors.blue.shade100,
+      Colors.orange.shade100,
+      Colors.green.shade100,
+    ];
 
-      return StatCard(
-        imagePath: imagePaths[index],
-        count: downloadCounts[index],
-        label: downloadLabels[index],
-        color: cardColors[index],
-      );
-    },
-  );
-}
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: imagePaths.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 1,
+      ),
+      itemBuilder: (context, index) {
+        return StatCard(
+          imagePath: imagePaths[index],
+          count: downloadCounts[index],
+          label: downloadLabels[index],
+          color: cardColors[index],
+        );
+      },
+    );
+  }
 }
 
 _handleSignOut(dynamic context) async {
