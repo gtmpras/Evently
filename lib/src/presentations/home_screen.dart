@@ -1,6 +1,7 @@
 import 'package:evently/core/constants/font_constants.dart';
 import 'package:evently/core/helper/gap.dart';
 import 'package:evently/core/routing/route_constants.dart';
+import 'package:evently/shared/widgets/bottom_navigation_bar.dart';
 import 'package:evently/src/partners/services/auth_services.dart';
 import 'package:evently/src/presentations/widgets/create_event_form.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
+  int _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,38 +30,43 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 16,
-              ),
-              child: _buildWelcomeBanner(),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: _buildButtonRow(),
-            ),
-            VerticalGap.xxs,
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
-                child: Column(
-                  children: [
-                    _buildDescriptionSection(),
-                    VerticalGap.xxs,
-                    Text("Platform Stats", style: AppFonts.heading),
-                    VerticalGap.xxs,
-                    _buildGridView(),
-                  ],
-                ),
-              ),
-            ),
-          ],
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
+          child: Column(
+            children: [
+              _buildWelcomeBanner(),
+              VerticalGap.m,
+              _buildDescriptionSection(),
+              VerticalGap.xxs,
+              Text("Platform Stats", style: AppFonts.heading),
+              VerticalGap.xxs,
+              _buildGridView(),
+            ],
+          ),
         ),
+      ),
+
+      // 👇 bottom navigation bar instead of button row
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() => _currentIndex = index);
+
+          switch (index) {
+            case 0:
+              context.push('/myEvent');
+              break;
+            case 1:
+              context.push('/findEvent');
+              break;
+            case 2:
+              _buildCreateEvents();
+              break;
+            case 3:
+              _handleSignOut(context);
+              break;
+          }
+        },
       ),
     );
   }
@@ -69,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [Colors.deepPurple, Colors.purpleAccent],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -93,73 +100,20 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildButtonRow() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          _buildStyledButton("My Events", onPressed: () {
-            context.push('/myEvent');
-          }),
-          _buildStyledButton("Find Events", onPressed: () {
-            context.push('/findEvent');
-
-          }),
-          _buildStyledButton(
-            "Create Events",
-            onPressed: () => _buildCreateEvents(),
-          ),
-          _buildStyledButton(
-            "Sign Out",
-            onPressed: () => _handleSignOut(context),
-            isDanger: true,
-          ),
-        ],
-      ),
-    );
-  }
-
   _buildCreateEvents() {
     return showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Important for full height with keyboard
+      isScrollControlled: true,
       builder:
           (_) => Padding(
             padding: EdgeInsets.only(
               left: 16,
               right: 16,
               top: 16,
-              bottom:
-                  MediaQuery.of(
-                    context,
-                  ).viewInsets.bottom, // Adjust for keyboard
+              bottom: MediaQuery.of(context).viewInsets.bottom,
             ),
-            child: SingleChildScrollView(child: const CreateEventForm()),
+            child: const SingleChildScrollView(child: CreateEventForm()),
           ),
-    );
-  }
-
-  Widget _buildStyledButton(
-    String text, {
-    required VoidCallback onPressed,
-    bool isDanger = false,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: isDanger ? Colors.red : Colors.blue,
-          foregroundColor: isDanger ? Colors.blue : Colors.black,
-          elevation: 1,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: Colors.grey.shade300),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        ),
-        child: Text(text, style: AppFonts.buttonText),
-      ),
     );
   }
 
@@ -175,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Text("Experience hassle-free Events", style: AppFonts.heading),
           VerticalGap.xs,
           Text(
-            "Welcome to Evently, your all-in-one event management solution designed to simplify planning and execution. Whether it's a corporate event, wedding, or social gathering, our intuitive platform helps you manage schedules, send invitations, track RSVPs, and coordinate vendors effortlessly.",
+            "Welcome to Evently, your all-in-one event management solution designed to simplify planning and execution...",
             style: AppFonts.bodyText,
             textAlign: TextAlign.justify,
           ),
@@ -191,7 +145,6 @@ class _HomeScreenState extends State<HomeScreen> {
       "images/headphone.png",
       "images/favoriteseller.png",
     ];
-
     final List<String> downloadCounts = ["2.5K", "1.5K", "82", "40"];
     final List<String> downloadLabels = [
       "Downloads",
@@ -202,9 +155,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return GridView.builder(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: 4,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
@@ -219,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
               BoxShadow(
                 color: Colors.grey.withOpacity(0.2),
                 blurRadius: 6,
-                offset: Offset(2, 4),
+                offset: const Offset(2, 4),
               ),
             ],
           ),

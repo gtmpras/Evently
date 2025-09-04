@@ -84,7 +84,7 @@ CREATE TABLE $tableEvents(
       tableEvents,
       where: '${EventFields.uid} = ?',
       whereArgs: [uid],
-      orderBy: '${EventFields.eventDate} ASC');
+      orderBy: '${EventFields.eventTime} DESC');
 
     return result.map((json) => Event.fromJson(json)).toList();
   }
@@ -93,9 +93,10 @@ CREATE TABLE $tableEvents(
   Future<List<Event>> readOtherUsersEvents(String currentUid) async {
   final db = await instance.database;
   final result = await db.query(
-    'events',
+    tableEvents,
     where: 'uid != ?',
     whereArgs: [currentUid],
+    orderBy: '${EventFields.eventTime} DESC'
   );
   return result.map((json) => Event.fromJson(json)).toList();
 }
