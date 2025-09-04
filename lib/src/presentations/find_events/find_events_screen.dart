@@ -20,7 +20,7 @@ class _FindEventScreenState extends State<FindEventScreen> {
         foregroundColor: Colors.white,
         backgroundColor: Colors.deepPurple,
         title: Text(
-          "My Events",
+          "Other Events",
           style: AppFonts.headingL.copyWith(color: Colors.white),
         ),
         centerTitle: true,

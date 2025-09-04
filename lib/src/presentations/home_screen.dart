@@ -2,6 +2,7 @@ import 'package:evently/core/constants/font_constants.dart';
 import 'package:evently/core/helper/gap.dart';
 import 'package:evently/core/routing/route_constants.dart';
 import 'package:evently/shared/widgets/bottom_navigation_bar.dart';
+import 'package:evently/shared/widgets/stat_card_widget.dart';
 import 'package:evently/src/partners/services/auth_services.dart';
 import 'package:evently/src/presentations/widgets/create_event_form.dart';
 import 'package:flutter/material.dart';
@@ -20,19 +21,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.deepPurple,
-        title: Text(
-          "Evently",
-          style: AppFonts.headingL.copyWith(color: Colors.white),
-        ),
-        centerTitle: true,
-      ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildWelcomeBanner(),
               VerticalGap.m,
@@ -40,13 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
               VerticalGap.xxs,
               Text("Platform Stats", style: AppFonts.heading),
               VerticalGap.xxs,
-              _buildGridView(),
+              Expanded(child: SingleChildScrollView(child: _buildGridView()))
             ],
           ),
         ),
       ),
 
-      // 👇 bottom navigation bar instead of button row
+      // bottom navigation bar
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -74,14 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildWelcomeBanner() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 35),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Colors.deepPurple, Colors.purpleAccent],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
+        image: DecorationImage(image: AssetImage('images/event_room.PNG'),fit: BoxFit.cover),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,8 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           VerticalGap.xl,
           Text(
-            "Plan, manage, and create events effortlessly.",
-            style: AppFonts.subheading.copyWith(color: Colors.white70),
+            "Plan, manage, and create \n events effortlessly.",
+            style: AppFonts.subheading.copyWith(color: Colors.white),
           ),
         ],
       ),
@@ -137,63 +126,48 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+Widget _buildGridView() {
+  final List<String> imagePaths = [
+    "images/download.png",
+    "images/profile.png",
+    "images/headphone.png",
+    "images/favoriteseller.png",
+  ];
+  final List<String> downloadCounts = ["2.5K", "1.5K", "82", "40"];
+  final List<String> downloadLabels = [
+    "Downloads",
+    "Users",
+    "Files",
+    "Places",
+  ];
+  final List<Color> cardColors = [
+    Colors.deepPurple.shade100,
+    Colors.blue.shade100,
+    Colors.orange.shade100,
+    Colors.green.shade100,
+  ];
 
-  Widget _buildGridView() {
-    final List<String> imagePaths = [
-      "images/download.png",
-      "images/profile.png",
-      "images/headphone.png",
-      "images/favoriteseller.png",
-    ];
-    final List<String> downloadCounts = ["2.5K", "1.5K", "82", "40"];
-    final List<String> downloadLabels = [
-      "Downloads",
-      "Users",
-      "Files",
-      "Places",
-    ];
+  return GridView.builder(
+    shrinkWrap: true,
+    physics: const NeverScrollableScrollPhysics(),
+    itemCount: imagePaths.length,
+    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      childAspectRatio: 1,
+    ),
+    itemBuilder: (context, index) {
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 4,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        childAspectRatio: 1,
-      ),
-      itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                blurRadius: 6,
-                offset: const Offset(2, 4),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                imagePaths[index],
-                height: 35,
-                color: Colors.deepPurple,
-              ),
-              VerticalGap.xs,
-              Text(downloadCounts[index], style: AppFonts.heading),
-              Text(downloadLabels[index], style: AppFonts.subheading),
-            ],
-          ),
-        );
-      },
-    );
-  }
+      return StatCard(
+        imagePath: imagePaths[index],
+        count: downloadCounts[index],
+        label: downloadLabels[index],
+        color: cardColors[index],
+      );
+    },
+  );
+}
 }
 
 _handleSignOut(dynamic context) async {
